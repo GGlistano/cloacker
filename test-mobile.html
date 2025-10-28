@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Mobile - Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .log {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .overlay.show {
+            display: flex !important;
+        }
+        .card {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .card h2 {
+            font-size: 32px;
+            margin: 20px 0;
+        }
+        .card button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste Mobile Debug</h1>
+
+    <button onclick="testOverlay()">🎉 Testar Overlay de Celebração</button>
+
+    <div class="log">
+        <strong>Console Logs:</strong>
+        <div id="logs"></div>
+    </div>
+
+    <div id="overlay" class="overlay">
+        <div class="card">
+            <div style="font-size: 80px;">🏆</div>
+            <h2>PARABÉNS!</h2>
+            <p style="font-size: 24px; font-weight: bold;">850 MTS</p>
+            <button onclick="closeOverlay()">Continuar →</button>
+        </div>
+    </div>
+
+    <script>
+        function log(msg) {
+            const logs = document.getElementById('logs');
+            const time = new Date().toLocaleTimeString();
+            logs.innerHTML += `<div>[${time}] ${msg}</div>`;
+            logs.scrollTop = logs.scrollHeight;
+            console.log(msg);
+        }
+
+        function testOverlay() {
+            log('=== TESTE INICIADO ===');
+
+            const overlay = document.getElementById('overlay');
+            log('Overlay element: ' + (overlay ? 'FOUND' : 'NOT FOUND'));
+
+            if (overlay) {
+                log('Removendo classe hidden...');
+                overlay.classList.remove('hidden');
+
+                log('Adicionando classe show...');
+                overlay.classList.add('show');
+
+                log('Definindo display flex...');
+                overlay.style.display = 'flex';
+
+                log('Z-index: ' + overlay.style.zIndex);
+                log('Display: ' + getComputedStyle(overlay).display);
+                log('Position: ' + getComputedStyle(overlay).position);
+
+                log('✅ Overlay deveria estar visível agora!');
+
+                document.body.style.overflow = 'hidden';
+                log('Body scroll disabled');
+            }
+        }
+
+        function closeOverlay() {
+            log('=== FECHANDO OVERLAY ===');
+
+            const overlay = document.getElementById('overlay');
+            overlay.classList.remove('show');
+            overlay.style.display = 'none';
+
+            document.body.style.overflow = 'auto';
+            log('✅ Overlay fechado!');
+        }
+
+        log('Página carregada!');
+        log('User Agent: ' + navigator.userAgent);
+        log('Screen: ' + window.screen.width + 'x' + window.screen.height);
+        log('Viewport: ' + window.innerWidth + 'x' + window.innerHeight);
+    </script>
+</body>
+</html>
